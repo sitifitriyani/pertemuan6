@@ -1,20 +1,24 @@
 import { useState } from "react";
 import ListProduct from "../components/ListProduct";
+import { useEffect } from "react";
 
+const saveProduct = localStorage.getItem("mydata");
+
+const initialProduct = [     {
+  id: 1,
+  name: "sandal",
+  harga: 40000,
+},
+{
+  id: 2,
+  name: "sepatu",
+  harga: 400000,
+},
+]
 export default function Products() {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "sandal",
-      harga: 40000,
-    },
-    {
-      id: 2,
-      name: "sepatu",
-      harga: 400000,
-    },
-  ]);
-  
+  const [products, setProducts] = useState(
+    saveProduct ? JSON.parse(saveProduct) : initialProduct
+  );
   const [productName, setProductName] = useState("");
   const [productHarga, setProductHarga] = useState("");
   const handleAddProduct = () => {
@@ -42,6 +46,11 @@ export default function Products() {
     const deleteProduct = products.filter((product) => product.id !== id);
     setProducts(deleteProduct);
   };
+
+  useEffect(()=>{
+    localStorage.setItem("mydata", JSON.stringify(products))
+  },[products]);
+  
   return (
     <div>
       <div className="flex gap-4 p-7 ">
